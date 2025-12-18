@@ -1,34 +1,13 @@
-# Shadowsocks-libev Optimized for Railway
-# Single user, maximum performance, minimal resources
+# استخدم صورة جاهزة تحتوي على Shadowsocks
+FROM shadowsocks/shadowsocks-libev
 
-FROM alpine:3.18 AS base
-
-# Install shadowsocks-libev only
-RUN apk add --no-cache shadowsocks-libev
-
-# Create non-root user for Railway compatibility
-RUN adduser -D -H ssuser
-
-# Switch to non-root user
-USER ssuser
+# إعداد البيئة
+ENV PASSWORD=iyad2013
+ENV PORT=8388
+ENV METHOD=aes-256-gcm
 
 # Expose port
 EXPOSE 8388
 
-# Run shadowsocks-server directly with inline config
-# Optimizations:
-# - no-delay: disable Nagle's algorithm for lower latency
-# - fast-open: TCP Fast Open for faster connections
-# - reuse-port: better performance on multi-core
-# - timeout 60: quick cleanup of idle connections
-# - no logging (-v removed)
-CMD ["ss-server", \
-     "-s", "0.0.0.0", \
-     "-p", "8388", \
-     "-k", "iyad2013", \
-     "-m", "aes-256-gcm", \
-     "-t", "60", \
-     "--no-delay", \
-     "--reuse-port", \
-     "-u"]
-
+# Run Shadowsocks server
+CMD ss-server -s 0.0.0.0 -p $PORT -k $PASSWORD -m $METHOD -t 60 --no-delay --reuse-port -u
