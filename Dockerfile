@@ -1,7 +1,7 @@
 # Shadowsocks-libev Optimized for Railway
 # Single user, maximum performance, minimal resources
 
-FROM alpine:3.19 AS base
+FROM alpine:3.18 AS base
 
 # Install shadowsocks-libev only
 RUN apk add --no-cache shadowsocks-libev
@@ -31,3 +31,4 @@ CMD ["ss-server", \
      "--no-delay", \
      "--reuse-port", \
      "-u"]
+
